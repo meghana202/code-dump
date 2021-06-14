@@ -74,7 +74,7 @@ Genome = read(genome,String)
 newline = "\n"
 Genome = replace(Genome,newline => "" )
 Skew(Genome)
-Genome[3923620:3923620+500]
+#Genome[3923620:3923620+500]
 
 #The number of different base pairs in sequences of the same length (p and q)
 function HammingDistance(p,q)
@@ -138,7 +138,7 @@ function Neighbors(Pattern,d)
 end 
 Neighbors("CCAGTCAATG",1) 
 
-#kmers with most neighbors in text, kmer doesn't necessarily appear in text (appears k times with hamming distance <= d)
+#kmers with most neighbors in text, kmer doesn't necessarily appear in text, has hamming distance <= d
 function FrequentMismatch(Text, k, d)
     FrequencyArray = zeros(Int64,4^k)
     for i = 1:(length(Text)-(k-1))
