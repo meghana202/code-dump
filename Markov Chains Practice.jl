@@ -12,6 +12,7 @@ i = 1
 j = 3
 n = 2
 P(A, i, j, n)
+#0.22
 
 #most likely walk with n steps
 function walk(t_matrix, n)
@@ -37,6 +38,7 @@ end
 A = [.5 .2 .3; .6 .2 .2; .1 .8 .1]
 n = 2
 walk(A,10)
+#3->2->1->1->1->1->1->1->1->1->1
 
 #returns stationary distribution given transition matrix through ITERATION (n times)
 function i_stationary(t_matrix, n)
@@ -55,9 +57,11 @@ return station
 end
 B = [.2 .6 .2 ; .3 0 .7 ; .5 0 .5 ]
 i_stationary(B,100)
+#=1×3 Matrix{Float64}:
+0.352113  0.211268  0.43662=# 
 
-#returns stationary distribution given transition matrix through eigendecomposition
-#using QuantEcon
+#=returns stationary distribution given transition matrix through eigendecomposition
+using QuantEcon=#
 function s_stationary(t_matrix)
     mc = MarkovChain(t_matrix)
     answer = stationary_distributions(mc)
@@ -66,7 +70,9 @@ function s_stationary(t_matrix)
 end
 B = [.2 .6 .2 ; .3 0 .7 ; .5 0 .5 ]
 s_stationary(B)  
-
+#=1-element Vector{Vector{Float64}}:
+ [0.35211267605633806, 0.21126760563380287, 0.4366197183098592]=#
+    
 #returns stationary distribution given transition matrix through eigendecomposition
 function d_stationary(t_matrix)
     F = eigen(t_matrix)
@@ -84,3 +90,5 @@ function d_stationary(t_matrix)
 end
 B = [.2 .6 .2; .3 0 .7; .5 0 .5]
 d_stationary(B)
+#= 1×3 Matrix{Float64}:
+ 0.352113  0.211268  0.43662 =#
