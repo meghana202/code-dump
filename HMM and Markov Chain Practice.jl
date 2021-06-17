@@ -92,3 +92,70 @@ B = [.2 .6 .2; .3 0 .7; .5 0 .5]
 d_stationary(B)
 #= 1×3 Matrix{Float64}:
  0.352113  0.211268  0.43662 =#
+    
+ #returns probability of observed sequence
+function forward_probability(pi, observation, t_matrix, e_matrix)
+    N = length(pi)
+    T = length(observation)
+    forward_matrix = zeros(N,T)
+    first_obs = observation[1]
+    #initialization
+    for i = 1:N
+        forward_matrix[i,1] = pi[1,i]*e_matrix[first_obs,i]
+    end
+    #recursion
+    for i = 2:T
+        for k = 1:N
+            previous = forward_matrix[i-1:i]
+            x = previous[1]*t_matrix[1,k]*e_matrix[observation[i],k]+previous[2]*t_matrix[2,k]*e_matrix[observation[i],k]
+            forward_matrix[k,i] = x
+        end
+    end
+    #termination
+    return sum(forward_matrix[1:N,T])
+end
+pi = [.8 .2]
+e_matrix = [.2 .5; .4 .4; .4 .1]
+t_matrix = [.6 .4;.5 .5]
+observation = [3 1 3]
+forward_probability(pi, observation, t_matrix, e_matrix)
+#0.015700000000000002
+    
+#returns most likely sequence from observed values
+function viterbi(pi, observation, t_matrix, e_matrix)
+    N = length(pi)
+    T = length(observation)
+    viterbi = zeros(N,T)
+    first_obs = observation[1]
+    backpointer = zeros(T)
+    #initialization
+    for i = 1:N
+        viterbi[i,1] = pi[1,i]*e_matrix[first_obs,i]
+    end
+    #recursion
+    for i = 2:T
+        for k = 1:N
+            previous = viterbi[i-1:i]
+            max_ = max(previous[1]*t_matrix[1,k]*e_matrix[observation[i],k],previous[2]*t_matrix[2,k]*e_matrix[observation[i],k])
+            location = argmax([previous[1]*t_matrix[1,k]*e_matrix[observation[i],k],previous[2]*t_matrix[2,k]*e_matrix[observation[i],k]])
+            viterbi[k,i] = max_
+            backpointer[i] = location
+        end
+    end
+    #termination
+    bestpathprob = maximum(viterbi[1:N,T])
+    bestpathpointer = argmax(viterbi[1:N,T])
+    bestpath = zeros(T)
+    for i = 2:T
+        bestpath[i-1] = backpointer[i]
+    end
+    bestpath[T] = bestpathpointer
+    bestpath = join(bestpath,"->")
+    return bestpath, bestpathprob
+end
+pi = [.8 .2]
+e_matrix = [.2 .5; .4 .4; .4 .1]
+t_matrix = [.6 .4;.5 .5]
+observation = [3 1 3]
+viterbi(pi,observation,t_matrix, e_matrix)
+#("1.0->2.0->1.0", 0.007680000000000003)
