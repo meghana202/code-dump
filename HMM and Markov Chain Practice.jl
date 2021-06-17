@@ -106,7 +106,7 @@ function forward_probability(pi, observation, t_matrix, e_matrix)
     #recursion
     for i = 2:T
         for k = 1:N
-            previous = forward_matrix[i-1:i]
+            previous = forward_matrix[1:N, i-1]
             x = previous[1]*t_matrix[1,k]*e_matrix[observation[i],k]+previous[2]*t_matrix[2,k]*e_matrix[observation[i],k]
             forward_matrix[k,i] = x
         end
@@ -119,7 +119,7 @@ e_matrix = [.2 .5; .4 .4; .4 .1]
 t_matrix = [.6 .4;.5 .5]
 observation = [3 1 3]
 forward_probability(pi, observation, t_matrix, e_matrix)
-#0.015700000000000002
+#0.02856200000000001
     
 #returns most likely sequence from observed values
 function viterbi(pi, observation, t_matrix, e_matrix)
@@ -135,7 +135,7 @@ function viterbi(pi, observation, t_matrix, e_matrix)
     #recursion
     for i = 2:T
         for k = 1:N
-            previous = viterbi[i-1:i]
+            previous = viterbi[1:N, i-1]
             max_ = max(previous[1]*t_matrix[1,k]*e_matrix[observation[i],k],previous[2]*t_matrix[2,k]*e_matrix[observation[i],k])
             location = argmax([previous[1]*t_matrix[1,k]*e_matrix[observation[i],k],previous[2]*t_matrix[2,k]*e_matrix[observation[i],k]])
             viterbi[k,i] = max_
@@ -158,4 +158,4 @@ e_matrix = [.2 .5; .4 .4; .4 .1]
 t_matrix = [.6 .4;.5 .5]
 observation = [3 1 3]
 viterbi(pi,observation,t_matrix, e_matrix)
-#("1.0->2.0->1.0", 0.007680000000000003)
+#(("1.0->2.0->1.0", 0.012800000000000004)
