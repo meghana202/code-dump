@@ -158,4 +158,5 @@ e_matrix = [.2 .5; .4 .4; .4 .1]
 t_matrix = [.6 .4;.5 .5]
 observation = [3 1 3]
 viterbi(pi,observation,t_matrix, e_matrix)
+
 #(("1.0->2.0->1.0", 0.012800000000000004)
