@@ -545,6 +545,36 @@ function splicing()
 end
 #splicing()
 		
+#PERM 
+function perm(n,m)
+	list = []
+	nums = 1:n
+	if m == 1
+		for i = 1:n push!(list, string(i)) end
+		return list
+	elseif m > 1
+		temp = perm(n,m-1)
+		for i = 1:length(temp)
+			for j in nums
+				if !occursin(string(j), temp[i])
+					push!(list, temp[i]*" "*string(j)) 
+				end 
+			end
+		end 
+		return list
+	end			
+end
+
+
+function output_formatting(n)
+	println(factorial(n))
+	x = perm(n,n)
+	println(length(x))
+	for i = 1:factorial(n) println(x[i]) end
+end
+output_formatting(7)
+
+
 			
  
 
