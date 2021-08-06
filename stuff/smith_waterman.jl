@@ -1,7 +1,5 @@
-#match = 1, mismatch = -1, gap = -5
-function sw()
-	seq1 = ARGS[1]
-	seq2 = ARGS[2]
+#match = 5, mismatch = -1, gap = -1
+function sw(seq1, seq2)
 	matrix_ = fill(0,length(seq2)+1,length(seq1)+1)
 	trace_ = Matrix{Union{Char, Nothing}}(nothing,length(seq2)+1,length(seq1)+1)
 
@@ -15,36 +13,49 @@ function sw()
 	trace_[1,1] = '-' 
 	
 	#fill
+	max_score = 0
+	max_i = 0
+	max_j = 0
 	for i = 2:length(seq2)+1
 		for j = 2:length(seq1)+1
 			#x stores whether it was a match or mismatch/indel
-			if seq1[j-1]==seq2[i-1] x = 1 else x = -1 end
+			if seq1[j-1]==seq2[i-1] x = 5 else x = -1 end
 			
 			#filling matrix
-			top = matrix_[i-1,j] - 5
-			left = matrix_[i, j-1] - 5
+			top = matrix_[i-1,j] - 1
+			left = matrix_[i, j-1] - 1
 			di = matrix_[i-1,j-1] + x
-			if max(top, left, di) <= 0 matrix_[i,j] = 0
-			else matrix_[i,j] = max(top, left, di) end
 			
-			#filling trace
-			if max(top, left, di) == top trace_[i,j] = 'U'
-			elseif max(top, left, di) == left trace_[i,j] = 'L'
-			elseif max(top, left, di) == di trace_[i,j] = 'D' end
-			
+			if 0 > di && 0 > top && 0 > left 
+				matrix_[i,j] = 0 
+			elseif di > top && di > left
+				if di > max_score 
+					max_score = di
+					max_i = i
+					max_j = j
+				end
+				matrix_[i,j] = di
+				trace_[i,j] = 'D'
+			elseif top > left
+				matrix_[i,j] = top
+				trace_[i,j] = 'U'
+			else 
+				matrix_[i,j] = left
+				trace_[i,j] = 'L'
+			end			
 		end
 	end
 
 	#trace
 	seqs = []
-	max_ = maximum(matrix_)
-	length_ = length(findall(x->x == max_, matrix_))
+	x = max_i
+	y = max_j
+	loc = findall(x->x == max_score, matrix_)
+	length_ = length(loc)
 	for i = 1:length_
-		cell_ = findall(x->x == max_, matrix_)[i]
+		cell_ = loc[i]
 		firstseq = ""
 		secondseq = ""
-		x = cell_[1]
-		y = cell_[2]
 		while true
 			x = cell_[1]
 			y = cell_[2]
@@ -64,7 +75,6 @@ function sw()
 				cell_ = [x-1, y-1]
 			end
 		end
-		
 		push!(seqs,(firstseq, secondseq))
 	end
 	
@@ -77,5 +87,6 @@ function sw()
 		end
 	end
 	for element in answer println(reverse(element)) end
+	
 end
-sw()
+sw(ARGS[1], ARGS[2])
