@@ -1,7 +1,5 @@
 #match = 1, mismatch = -1, gap = -1
-function nw()
-	seq1 = ARGS[1]
-	seq2 = ARGS[2]
+function nw(seq1, seq2)
 	matrix_ = fill(0,length(seq2)+1,length(seq1)+1)
 	trace_ = Matrix{Union{Char, Nothing}}(nothing,length(seq2)+1,length(seq1)+1)
 
@@ -22,16 +20,20 @@ function nw()
 			#x stores whether it was a match or mismatch/indel
 			if seq1[j-1]==seq2[i-1] x = 1 else x = -1 end
 			
-			#filling matrix
 			top = matrix_[i-1,j] - 1
 			left = matrix_[i, j-1] - 1 
 			di = matrix_[i-1,j-1] + x
-			matrix_[i,j] = max(top, left, di)
 			
-			#filling trace
-			if max(top, left, di) == top trace_[i,j] = 'U'
-			elseif max(top, left, di) == left trace_[i,j] = 'L'
-			elseif max(top, left, di) == di trace_[i,j] = 'D' end
+			if di > top && di > left
+				matrix_[i,j] = di
+				trace_[i,j] = 'D'
+			elseif top > left
+				matrix_[i,j] = top
+				trace_[i,j] = 'U'
+			else 
+				matrix_[i,j] = left
+				trace_[i,j] = 'L'
+			end
 			
 		end
 	end
@@ -62,7 +64,4 @@ function nw()
 	println(reverse(firstseq))
 	println(reverse(secondseq))
 end
-nw()
-
-
-
+nw(ARGS[1], ARGS[2])
