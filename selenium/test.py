@@ -12,7 +12,7 @@ def Hello():
 	
 	submit = driver.find_element_by_css_selector('#page-wrapper > div.whois-masthead > form > button')
 	submit.click()
-	driver.close()
+	driver.quit()
 
 
 Hello()
