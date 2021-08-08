@@ -14,7 +14,7 @@ def test():
 	submit = driver.find_element_by_css_selector('#page-wrapper > div.whois-masthead > form > button')
 	submit.click()
 	
-	register = driver.find_element_by_css_selector('#page-wrapper > div > div.whois_main_column > div:nth-child(6) > div:nth-child(5) > div.df-value')
+	register = driver.find_element_by_css_selector('#page-wrapper > div > div.whois_main_column > div:nth-child(6) > div:nth-child(4) > div.df-value')
 	print(f"Registered On: {register.text}")
 	
 	expire = driver.find_element_by_css_selector('#page-wrapper > div > div.whois_main_column > div:nth-child(6) > div:nth-child(5) > div.df-value')
