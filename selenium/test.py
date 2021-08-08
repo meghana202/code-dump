@@ -3,7 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 
 
-def Hello():
+def test):
 	driver = webdriver.Chrome()
 	driver.get("https://www.whois.com/whois")
  
@@ -15,6 +15,6 @@ def Hello():
 	driver.quit()
 
 
-Hello()
+test()
 
 
