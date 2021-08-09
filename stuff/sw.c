@@ -67,7 +67,7 @@ void sw(const char *seq1, const char *seq2) {
 		}
 	}
 	
-	//trace
+	//trace -- reversing string not needed..fix
 	int max;
 	if (l2>l1){
 		max = l1;
