@@ -5,13 +5,8 @@ body = [" O \n", "/", "|", "\ \n", "/", " \ \n"]
 words = ["zebra", "goat", "chicken"]
 
 word = words[random.randint(0, len(words)-1)]
-print(word)
 answer = ' '.join(list(word)) + " "
 
-
-for i in range(6):
-	print(body[i], end = "")
-	
 		
 x = 0
 letters = ["_ "]*len(word)
